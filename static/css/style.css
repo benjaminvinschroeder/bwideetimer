@@ -25,6 +25,35 @@ body, html {
     align-items: center;
 }
 
+/* --- Top Right Fullscreen Icon --- */
+.fullscreen-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    color: var(--text-grey);
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0.3; /* Subtle by default */
+    transition: opacity 0.3s, transform 0.2s, color 0.3s;
+    padding: 10px;
+    margin: 0; /* Reset generic button margin */
+}
+
+.fullscreen-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background: transparent; /* Prevent generic hover bg */
+    color: var(--green-bright);
+}
+
+.fullscreen-btn svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+}
+
 /* --- Header Area --- */
 .header-logo {
     padding-top: 40px;
@@ -59,7 +88,7 @@ body, html {
 }
 
 #timer-display {
-    font-size: 25vw; /* Responsive font size based on viewport width */
+    font-size: 40vw; /* Responsive font size based on viewport width */
     font-weight: 700;
     color: var(--green-bright);
     line-height: 1;
@@ -80,7 +109,7 @@ body, html {
 
 /* --- Elapsed Timer (Second small timer) --- */
 #elapsed-display {
-    font-size: 3vw;
+    font-size: 5vw;
     color: var(--text-grey);
     margin-top: -10px; /* Pull closer to main timer */
     opacity: 0.6;

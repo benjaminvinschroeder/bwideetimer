@@ -9,12 +9,8 @@ let elapsedStartTime = 0;
 let elapsedAccumulated = 0;
 
 function updateDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-
-    // Formats numbers to always have two digits (e.g., 01:09 instead of 1:9)
-    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    display.innerText = formattedTime;
+    // Show only total seconds (e.g. "90")
+    display.innerText = timeLeft;
 
     // Visual logic: Change color when time is running out (last 10 seconds)
     if (timeLeft <= 10 && timeLeft > 0) {
@@ -30,12 +26,12 @@ function updateElapsedDisplay() {
     // Calculate total milliseconds passed
     const now = Date.now();
     const diff = elapsedAccumulated + (now - elapsedStartTime);
-    
-    const mins = Math.floor(diff / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
+
+    const totalSeconds = Math.floor(diff / 1000);
     const ms = diff % 1000;
 
-    elapsedDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${ms.toString().padStart(3, '0')}`;
+    // Show total seconds and milliseconds (e.g. "5.123")
+    elapsedDisplay.innerText = `${totalSeconds}.${ms.toString().padStart(3, '0')}`;
 }
 
 function startTimer() {
@@ -88,7 +84,17 @@ function resetTimer() {
 
     // Reset Elapsed Timer
     elapsedAccumulated = 0;
-    elapsedDisplay.innerText = "00:00:000";
+    elapsedDisplay.innerText = "0.000";
+}
+
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
 }
 
 // --- Presentation Clicker & Keyboard Support ---
@@ -111,6 +117,10 @@ document.addEventListener('keydown', (event) => {
     else if (['PageUp', 'ArrowLeft', 'ArrowUp', 'Backspace'].includes(event.key)) {
         event.preventDefault();
         resetTimer();
+    }
+    // Toggle Fullscreen with 'F'
+    else if (event.key === 'f' || event.key === 'F') {
+        toggleFullscreen();
     }
 });
 
