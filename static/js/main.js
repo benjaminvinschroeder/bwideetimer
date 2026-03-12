@@ -2,6 +2,12 @@ let timeLeft = 90; // 90 seconds
 let timerInterval = null;
 const display = document.getElementById('timer-display');
 
+// Elapsed Timer Variables
+const elapsedDisplay = document.getElementById('elapsed-display');
+let elapsedInterval = null;
+let elapsedStartTime = 0;
+let elapsedAccumulated = 0;
+
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -20,9 +26,22 @@ function updateDisplay() {
     }
 }
 
+function updateElapsedDisplay() {
+    // Calculate total milliseconds passed
+    const now = Date.now();
+    const diff = elapsedAccumulated + (now - elapsedStartTime);
+    
+    const mins = Math.floor(diff / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+    const ms = diff % 1000;
+
+    elapsedDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}:${ms.toString().padStart(3, '0')}`;
+}
+
 function startTimer() {
     if (timerInterval) return; // Prevent multiple clicks
 
+    // 1. Logic for Main Countdown
     timerInterval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
@@ -30,22 +49,46 @@ function startTimer() {
         } else {
             clearInterval(timerInterval);
             timerInterval = null;
+            pauseTimer(); // Stop everything when done
             // Optional: Play a sound here
         }
     }, 1000);
+
+    // 2. Logic for Elapsed Milliseconds Timer
+    elapsedStartTime = Date.now();
+    elapsedInterval = setInterval(updateElapsedDisplay, 10); // Update every 10ms
+
+    // 3. Visual Animation
+    display.classList.add('timer-running');
 }
 
 function pauseTimer() {
+    // Stop Main Timer
     clearInterval(timerInterval);
     timerInterval = null;
+
+    // Stop Elapsed Timer & Save state
+    if (elapsedInterval) {
+        clearInterval(elapsedInterval);
+        elapsedAccumulated += Date.now() - elapsedStartTime;
+        elapsedInterval = null;
+    }
+
+    // Stop Animation
+    display.classList.remove('timer-running');
 }
 
 function resetTimer() {
     pauseTimer();
+    
+    // Reset Main Timer
     timeLeft = 90;
     updateDisplay();
-    // Reset color to brand bright green
-    display.style.color = "#A0C75E";
+    display.style.color = "#A0C75E"; // Reset color
+
+    // Reset Elapsed Timer
+    elapsedAccumulated = 0;
+    elapsedDisplay.innerText = "00:00:000";
 }
 
 // --- Presentation Clicker & Keyboard Support ---

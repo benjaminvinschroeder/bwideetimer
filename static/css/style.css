@@ -67,6 +67,28 @@ body, html {
     text-shadow: 4px 4px 10px rgba(0,0,0,0.3);
 }
 
+/* Animation class when running */
+.timer-running {
+    animation: pulse-green 2s infinite ease-in-out;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(1); text-shadow: 4px 4px 10px rgba(0,0,0,0.3); }
+    50% { transform: scale(1.02); text-shadow: 0 0 20px var(--green-regular); }
+    100% { transform: scale(1); text-shadow: 4px 4px 10px rgba(0,0,0,0.3); }
+}
+
+/* --- Elapsed Timer (Second small timer) --- */
+#elapsed-display {
+    font-size: 3vw;
+    color: var(--text-grey);
+    margin-top: -10px; /* Pull closer to main timer */
+    opacity: 0.6;
+    font-family: 'Courier New', Courier, monospace; /* Monospace reduces jitter */
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
 /* Control Buttons */
 .controls {
     margin-top: 20px;
