@@ -1,0 +1,117 @@
+:root {
+    /* Your Brand Colors */
+    --bg-dark: #2E3538;          /* Normal dark background */
+    --bg-dark-alt: #27414A;      /* Darkblue background (alternative) */
+    --text-grey: #E3E8EB;        /* Bright grey text */
+    --green-bright: #A0C75E;     /* Bright green */
+    --green-regular: #528B36;    /* Regular green */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: var(--bg-dark);
+    color: var(--text-grey);
+    font-family: 'Asap', 'Helvetica', sans-serif;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- Header Area --- */
+.header-logo {
+    padding-top: 40px;
+    height: 15vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header-logo img {
+    max-height: 70%;
+    max-width: 80vw;
+}
+
+.fallback-title {
+    /* Only shows if no logo image is found */
+    color: var(--text-grey);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* --- Timer Area --- */
+.timer-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#timer-display {
+    font-size: 25vw; /* Responsive font size based on viewport width */
+    font-weight: 700;
+    color: var(--green-bright);
+    line-height: 1;
+    font-variant-numeric: tabular-nums; /* Prevents jittering digits */
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Control Buttons */
+.controls {
+    margin-top: 20px;
+    opacity: 0; /* Hidden by default for cleaner look */
+    transition: opacity 0.3s ease;
+}
+
+.container:hover .controls {
+    opacity: 1; /* Show controls when mouse moves */
+}
+
+button {
+    background-color: var(--bg-dark-alt);
+    border: 2px solid var(--green-regular);
+    color: var(--text-grey);
+    padding: 10px 20px;
+    font-family: 'Asap', sans-serif;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background-color: var(--green-regular);
+    color: white;
+}
+
+/* --- Footer Area --- */
+.sponsor-bar {
+    height: 15vh;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px; /* Space between sponsor logos */
+    padding-bottom: 20px;
+    border-top: 2px solid var(--green-regular);
+}
+
+.sponsor-bar img {
+    max-height: 60%;
+    max-width: 200px;
+    /* filter: grayscale(100%); /* Optional: makes logos grayscale to blend in */
+    transition: filter 0.3s;
+}

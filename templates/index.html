@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Pitch Timer</title>
+    <!-- Import ASAP Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header: Main Event Logo -->
+        <header class="header-logo">
+            <!-- Replace src with your actual file in static/img/ -->
+            <img src="{{ url_for('static', filename='img/main_logo.png') }}" alt="Event Logo" onerror="this.style.display='none'">
+            <h1 class="fallback-title">PITCH TIMER</h1>
+        </header>
+
+        <!-- Main: The Timer -->
+        <main class="timer-container">
+            <div id="timer-display">01:30</div>
+
+            <!-- Controls (Hidden by opacity until hovered to keep screen clean) -->
+            <div class="controls">
+                <button onclick="startTimer()">Start</button>
+                <button onclick="pauseTimer()">Pause</button>
+                <button onclick="resetTimer()">Reset</button>
+            </div>
+        </main>
+
+        <!-- Footer: Sponsor Logos -->
+        <footer class="sponsor-bar">
+            <img src="{{ url_for('static', filename='img/generator.png') }}" alt="generator Logo" onerror="this.style.display='none'">
+            <img src="{{ url_for('static', filename='img/hdm.png') }}" alt="hdm Logo" onerror="this.style.display='none'">
+            <img src="{{ url_for('static', filename='img/ptka.jpg') }}" alt="ptka Logo" onerror="this.style.display='none'">
+            <img src="{{ url_for('static', filename='img/bw_um.png') }}" alt="bw um Logo" onerror="this.style.display='none'">
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
