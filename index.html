@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Pitch Timer</title>
+    <!-- Everything is local: works offline, straight from file:// -->
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Right Fullscreen Icon -->
+        <button class="fullscreen-btn" id="btn-fullscreen" title="Vollbild umschalten (F)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+            </svg>
+        </button>
+
+        <!-- Header: Main Event Logo -->
+        <header class="header-logo">
+            <img src="static/img/main_logo.png" alt="Event Logo" onerror="this.style.display='none'">
+        </header>
+
+        <!-- Current startup -->
+        <section class="startup-info">
+            <div class="startup-meta">
+                <span id="phase-label" class="phase-label">PITCH</span>
+                <span id="startup-counter" class="startup-counter"></span>
+            </div>
+            <div id="startup-name" class="startup-name"></div>
+            <div id="startup-uni" class="startup-uni"></div>
+        </section>
+
+        <!-- Main: The Timer -->
+        <main class="timer-container">
+            <div id="timer-display">90</div>
+            <div id="elapsed-display">0.000</div>
+
+            <!-- Controls (only visible while the mouse moves) -->
+            <div class="controls">
+                <button id="btn-prev" title="Vorherige Phase">&#9664;</button>
+                <button id="btn-start">Start</button>
+                <button id="btn-reset" title="Neustart (R)">Reset</button>
+                <button id="btn-next" title="Nächste Phase (N)">&#9654;</button>
+                <button id="btn-list" title="Starterliste (L)">Liste</button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div id="next-up" class="next-up"></div>
+            <div class="progress"><div id="progress-fill" class="progress-fill"></div></div>
+        </footer>
+    </div>
+
+    <div id="sound-state" class="toast"></div>
+
+    <!-- Starter list (L) -->
+    <div id="list-overlay" class="overlay">
+        <div class="overlay-panel">
+            <h2>Starterliste</h2>
+            <ol id="list-items" class="list-items"></ol>
+            <p class="overlay-hint">Klick = zu diesem Team springen · Esc = schließen</p>
+        </div>
+    </div>
+
+    <!-- Help (H) -->
+    <div id="help-overlay" class="overlay">
+        <div class="overlay-panel">
+            <h2>Steuerung</h2>
+            <table class="help-table">
+                <tr><td>Leertaste / → / Bild↓ / Enter</td><td>Start · Pause · Weiter — bei 0: nächste Phase</td></tr>
+                <tr><td>← / Bild↑ / Backspace</td><td>Neustart der Phase — nochmal: vorherige Phase</td></tr>
+                <tr><td>R</td><td>Neustart der Phase</td></tr>
+                <tr><td>P / Q</td><td>Pitch / Q&amp;A des aktuellen Teams</td></tr>
+                <tr><td>N</td><td>Nächste Phase</td></tr>
+                <tr><td>↓ / ↑</td><td>Nächstes / vorheriges Team</td></tr>
+                <tr><td>L</td><td>Starterliste</td></tr>
+                <tr><td>M</td><td>Ton an / aus</td></tr>
+                <tr><td>F</td><td>Vollbild</td></tr>
+                <tr><td>H</td><td>Diese Hilfe</td></tr>
+            </table>
+            <p class="overlay-hint">Zeiten &amp; Starterliste: static/js/config.js · Esc = schließen</p>
+        </div>
+    </div>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/main.js"></script>
+</body>
+</html>

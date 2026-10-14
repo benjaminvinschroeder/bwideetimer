@@ -1,3 +1,19 @@
+/* Bundled locally so the timer works without internet (Asap is a variable font: one file covers 400-700) */
+@font-face {
+    font-family: 'Asap';
+    font-weight: 400 700;
+    font-display: block;
+    src: url(../fonts/asap-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Asap';
+    font-weight: 400 700;
+    font-display: block;
+    src: url(../fonts/asap-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 :root {
     /* Your Brand Colors */
     --bg-dark: #2E3538;          /* Normal dark background */
@@ -5,6 +21,7 @@
     --text-grey: #E3E8EB;        /* Bright grey text */
     --green-bright: #A0C75E;     /* Bright green */
     --green-regular: #528B36;    /* Regular green */
+    --warning-red: #FF6B6B;
 }
 
 body, html {
@@ -15,6 +32,18 @@ body, html {
     color: var(--text-grey);
     font-family: 'Asap', 'Helvetica', sans-serif;
     overflow: hidden; /* Prevent scrolling */
+    user-select: none;
+    transition: background-color 0.4s;
+}
+
+/* Q&A phase gets the dark blue background so everyone sees the switch */
+body.phase-qa {
+    background-color: var(--bg-dark-alt);
+}
+
+/* Hide cursor and controls when the mouse rests */
+body.idle, body.idle * {
+    cursor: none !important;
 }
 
 .container {
@@ -54,28 +83,68 @@ body, html {
     display: block;
 }
 
+body.idle .fullscreen-btn {
+    opacity: 0;
+}
+
 /* --- Header Area --- */
 .header-logo {
-    padding-top: 40px;
-    height: 15vh;
+    padding-top: 3vh;
+    height: 11vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 }
 
 .header-logo img {
-    max-height: 70%;
-    max-width: 80vw;
+    max-height: 100%;
+    max-width: 60vw;
 }
 
-.fallback-title {
-    /* Only shows if no logo image is found */
-    color: var(--text-grey);
+/* --- Current Startup --- */
+.startup-info {
+    text-align: center;
+    margin-top: 2vh;
+}
+
+.startup-meta {
+    display: flex;
+    gap: 1.2vw;
+    align-items: center;
+    justify-content: center;
+}
+
+.phase-label {
+    background-color: var(--green-regular);
+    color: white;
     font-weight: 700;
-    letter-spacing: 2px;
-    margin: 0;
-    font-size: 1.5rem;
+    font-size: 3vh;
+    letter-spacing: 3px;
+    padding: 0.4vh 1.4vw;
+    border-radius: 6px;
+}
+
+body.phase-qa .phase-label {
+    background-color: var(--text-grey);
+    color: var(--bg-dark-alt);
+}
+
+.startup-counter {
+    font-size: 2.6vh;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+}
+
+.startup-name {
+    font-size: 7vh;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-top: 1vh;
+}
+
+.startup-uni {
+    font-size: 3.2vh;
+    opacity: 0.7;
 }
 
 /* --- Timer Area --- */
@@ -88,7 +157,7 @@ body, html {
 }
 
 #timer-display {
-    font-size: 40vw; /* Responsive font size based on viewport width */
+    font-size: min(36vw, 44vh); /* Fits 3 digits ("120") on any aspect ratio */
     font-weight: 700;
     color: var(--green-bright);
     line-height: 1;
@@ -96,9 +165,17 @@ body, html {
     text-shadow: 4px 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Animation class when running */
-.timer-running {
+body.is-running #timer-display {
     animation: pulse-green 2s infinite ease-in-out;
+}
+
+body.is-warning #timer-display {
+    color: var(--warning-red);
+}
+
+body.is-finished #timer-display {
+    color: var(--warning-red);
+    animation: blink 1s steps(2, start) infinite;
 }
 
 @keyframes pulse-green {
@@ -107,9 +184,13 @@ body, html {
     100% { transform: scale(1); text-shadow: 4px 4px 10px rgba(0,0,0,0.3); }
 }
 
-/* --- Elapsed Timer (Second small timer) --- */
+@keyframes blink {
+    to { visibility: hidden; }
+}
+
+/* --- Elapsed Timer (Second small timer / overtime) --- */
 #elapsed-display {
-    font-size: 5vw;
+    font-size: min(5vw, 6vh);
     color: var(--text-grey);
     margin-top: -10px; /* Pull closer to main timer */
     opacity: 0.6;
@@ -118,15 +199,21 @@ body, html {
     letter-spacing: 2px;
 }
 
+body.is-finished #elapsed-display {
+    color: var(--warning-red);
+    opacity: 1;
+}
+
 /* Control Buttons */
 .controls {
-    margin-top: 20px;
-    opacity: 0; /* Hidden by default for cleaner look */
+    margin-top: 2vh;
+    opacity: 1;
     transition: opacity 0.3s ease;
 }
 
-.container:hover .controls {
-    opacity: 1; /* Show controls when mouse moves */
+body.idle .controls {
+    opacity: 0; /* Hidden while the mouse rests for a clean screen */
+    pointer-events: none;
 }
 
 button {
@@ -138,8 +225,10 @@ button {
     font-size: 1.2rem;
     cursor: pointer;
     border-radius: 5px;
-    margin: 0 10px;
+    margin: 0 6px;
     text-transform: uppercase;
+    line-height: 1.4;
+    vertical-align: middle;
 }
 
 button:hover {
@@ -147,22 +236,130 @@ button:hover {
     color: white;
 }
 
-/* --- Footer Area --- */
-.sponsor-bar {
-    height: 15vh;
-    width: 100%;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px; /* Space between sponsor logos */
-    padding-bottom: 20px;
-    border-top: 2px solid var(--green-regular);
+#btn-start {
+    min-width: 11rem;
 }
 
-.sponsor-bar img {
-    max-height: 60%;
-    max-width: 200px;
-    /* filter: grayscale(100%); /* Optional: makes logos grayscale to blend in */
-    transition: filter 0.3s;
+/* --- Footer --- */
+.footer {
+    width: 100%;
+}
+
+.next-up {
+    text-align: center;
+    font-size: 2.6vh;
+    opacity: 0.5;
+    padding-bottom: 2vh;
+}
+
+.progress {
+    height: 1.2vh;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--green-bright);
+    transform-origin: left;
+}
+
+body.is-warning .progress-fill,
+body.is-finished .progress-fill {
+    background-color: var(--warning-red);
+}
+
+/* --- Toast (sound on/off) --- */
+.toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-dark-alt);
+    border: 2px solid var(--green-regular);
+    padding: 8px 20px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.toast.visible {
+    opacity: 1;
+}
+
+/* --- Overlays (starter list, help) --- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.overlay.visible {
+    display: flex;
+}
+
+body.idle .overlay, body.idle .overlay * {
+    cursor: default !important;
+}
+
+.overlay-panel {
+    background: var(--bg-dark);
+    border: 2px solid var(--green-regular);
+    border-radius: 10px;
+    padding: 24px 36px;
+    max-height: 85vh;
+    overflow-y: auto;
+    min-width: 40vw;
+}
+
+.overlay-panel h2 {
+    margin-top: 0;
+    color: var(--green-bright);
+}
+
+.list-items {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    padding-left: 2rem;
+    margin: 0;
+}
+
+.list-items li {
+    cursor: pointer;
+    padding: 0 8px;
+    border-radius: 4px;
+}
+
+.list-items li:hover {
+    background: var(--bg-dark-alt);
+}
+
+.list-items li.current {
+    color: var(--green-bright);
+    font-weight: 700;
+}
+
+.help-table {
+    border-collapse: collapse;
+    font-size: 1.1rem;
+}
+
+.help-table td {
+    padding: 6px 16px 6px 0;
+    vertical-align: top;
+}
+
+.help-table td:first-child {
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--green-bright);
+}
+
+.overlay-hint {
+    opacity: 0.5;
+    margin-bottom: 0;
 }
