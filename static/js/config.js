@@ -24,7 +24,7 @@ window.TIMER_CONFIG = {
         ["EyeSop", "HS Albstadt-Sigmaringen"],
         ["Palud.io", "HdM"],
         ["Skyshell", "HS Aalen"],
-        ["EchoEcho", "HS Pforzheim"],
+        ["EcoEcho", "HS Pforzheim"],
         ["CellScan", "KIT"],
         ["PreParted", "HS Biberach"],
         ["Loswerk", "HS Biberach"],
